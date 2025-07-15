@@ -10,10 +10,16 @@ import SolfeggioStudio from "./pages/SolfeggioStudio";
 import Footer from "./components/Footer";
 import ChakraChants from "./pages/ChakraChants";
 import PulseFlow from "./pages/PulseFlow";
+import { useEffect } from 'react'; // Added useEffect import
 
 function App() {
   const location = useLocation();
   const direction = location.state?.direction || 'right';
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]); // Trigger on pathname change
 
   const variants = {
     initial: (direction) => ({
@@ -30,7 +36,7 @@ function App() {
       scale: 1,
       boxShadow: "0 0 0 rgba(0, 0, 0, 0)",
       transition: {
-        duration: 0.4, // Faster slide-in
+        duration: 0.4,
         ease: [0.4, 0, 0.2, 1],
       },
     },
@@ -41,7 +47,7 @@ function App() {
       scale: 0.98,
       boxShadow: direction === 'right' ? "5px 0 10px rgba(0, 0, 0, 0.05)" : "-5px 0 10px rgba(0, 0, 0, 0.05)",
       transition: {
-        duration: 0.3, // Faster slide-out
+        duration: 0.3,
         ease: [0.4, 0, 0.2, 1],
         delay: 0.1,
       },

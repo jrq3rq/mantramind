@@ -51,7 +51,7 @@ const Home = () => {
           Use our AI chatbot to create mantras or action plans, downloadable as text, and share feedback via GitHub to refine our community’s offerings.
         </p>
         <p className="home-section-text">
-          <Link to="/mantras" className="home-section-link">Create Your Mantra</Link>
+          <Link to="/frequencies" className="home-section-link">Create Your Mantra</Link>
         </p>
       </section>
     </div>

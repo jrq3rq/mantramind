@@ -46,6 +46,7 @@ firebase-debug.log
 .env.*
 !.env.example
 
+
 backend/.env
 config/serviceAccountKey.json
 
