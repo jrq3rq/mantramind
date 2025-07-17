@@ -329,7 +329,6 @@
 // };
 
 // export default PulseFlow;
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/PulseFlow.css';
@@ -348,15 +347,15 @@ const PulseFlow = () => {
 
   // All nine Solfeggio Frequencies with shape parameters
   const frequencies = [
-    { hz: 174, name: 'Pain Relief', color: 'rgb(59, 130, 246)', description: 'Promotes stress reduction and physical calm.', shapeType: 'ripples', shapeOffset: 1.0 },
+    { hz: 174, name: 'Pain Relief', color: 'rgb(59, 130, 246)', description: 'Promotes stress reduction and physical calm.', shapeType: 'waves', shapeOffset: 1.0 },
     { hz: 285, name: 'Healing', color: 'rgb(249, 115, 22)', description: 'Supports tissue regeneration and energy restoration.', shapeType: 'spiral', shapeOffset: 1.1 },
-    { hz: 396, name: 'Fear Liberation', color: 'rgb(239, 68, 68)', description: 'Releases guilt and fear, grounding users.', shapeType: 'waves', shapeOffset: 1.2 },
-    { hz: 417, name: 'Change Facilitation', color: 'rgb(251, 146, 60)', description: 'Clears negativity, fosters transformation.', shapeType: 'lattice', shapeOffset: 1.3 },
-    { hz: 528, name: 'Transformation', color: 'rgb(250, 204, 21)', description: 'Reduces stress, promotes healing and DNA repair.', shapeType: 'flower', shapeOffset: 1.4 },
-    { hz: 639, name: 'Relationships', color: 'rgb(34, 197, 94)', description: 'Enhances communication and harmony.', shapeType: 'ring', shapeOffset: 1.5 },
-    { hz: 741, name: 'Intuition', color: 'rgb(96, 165, 250)', description: 'Awakens expression and intuitive clarity.', shapeType: 'web', shapeOffset: 1.6 },
-    { hz: 852, name: 'Spiritual Order', color: 'rgb(99, 102, 241)', description: 'Fosters awareness and spiritual balance.', shapeType: 'mandala', shapeOffset: 1.7 },
-    { hz: 963, name: 'Divine Connection', color: 'rgb(168, 85, 247)', description: 'Promotes enlightenment and universal unity.', shapeType: 'orbit', shapeOffset: 1.8 },
+    { hz: 396, name: 'Fear Liberation', color: 'rgb(239, 68, 68)', description: 'Releases guilt and fear, grounding users.', shapeType: 'shields', shapeOffset: 1.2 },
+    { hz: 417, name: 'Change Facilitation', color: 'rgb(251, 146, 60)', description: 'Clears negativity, fosters transformation.', shapeType: 'mosaic', shapeOffset: 1.3 },
+    { hz: 528, name: 'Transformation', color: 'rgb(250, 204, 21)', description: 'Reduces stress, promotes healing and DNA repair.', shapeType: 'lotus', shapeOffset: 1.4 },
+    { hz: 639, name: 'Relationships', color: 'rgb(34, 197, 94)', description: 'Enhances communication and harmony.', shapeType: 'knots', shapeOffset: 1.5 },
+    { hz: 741, name: 'Intuition', color: 'rgb(96, 165, 250)', description: 'Awakens expression and intuitive clarity.', shapeType: 'lattice', shapeOffset: 1.6 },
+    { hz: 852, name: 'Spiritual Order', color: 'rgb(99, 102, 241)', description: 'Fosters awareness and spiritual balance.', shapeType: 'compass', shapeOffset: 1.7 },
+    { hz: 963, name: 'Divine Connection', color: 'rgb(168, 85, 247)', description: 'Promotes enlightenment and universal unity.', shapeType: 'halo', shapeOffset: 1.8 },
   ];
 
   // AI-driven frequency suggestion
@@ -393,29 +392,22 @@ const PulseFlow = () => {
     }
   }, [volume]);
 
-  // Handle audio play/stop with haptic feedback
+  // Handle audio stop with haptic feedback
   const toggleAudio = () => {
-    if (isPlaying) {
-      if (oscillatorRef.current) oscillatorRef.current.stop();
+    if (isPlaying && oscillatorRef.current) {
+      oscillatorRef.current.stop();
       setIsPlaying(false);
-    } else if (frequency) {
-      oscillatorRef.current = audioContextRef.current.createOscillator();
-      oscillatorRef.current.type = 'sine';
-      oscillatorRef.current.frequency.setValueAtTime(frequency, audioContextRef.current.currentTime);
-      oscillatorRef.current.connect(gainNodeRef.current);
-      oscillatorRef.current.start();
-      setIsPlaying(true);
       if ('vibrate' in navigator) navigator.vibrate(50);
     }
   };
 
-  // Dynamic canvas sizing
+  // Dynamic canvas sizing (height reduced by 50%)
   useEffect(() => {
     const canvas = canvasRef.current;
     const updateCanvasSize = () => {
       const maxWidth = Math.min(window.innerWidth * 0.9, 720);
       canvas.width = maxWidth;
-      canvas.height = maxWidth * 0.75; // 4:3 aspect ratio
+      canvas.height = maxWidth * 0.375; // Original 0.75 * 0.5 for 50% height reduction
     };
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
@@ -436,9 +428,9 @@ const PulseFlow = () => {
       ctx.strokeStyle = '#b5b5b5';
       ctx.beginPath();
       for (let t = 0; t < Math.PI * 2; t += 0.01) {
-        const amplitude = (canvas.width * 0.15); // 50% of active amplitude
+        const amplitude = (canvas.width * 0.075); // 50% of original 0.15
         const a = 174 / 100; // Default to 174 Hz
-        const b = a * 1.0; // Default shapeOffset for ripples
+        const b = a * 1.0; // Default shapeOffset for waves
         const x = canvas.width / 2 + Math.cos(t * a) * amplitude * Math.cos(t * b);
         const y = canvas.height / 2 + Math.sin(t * a) * amplitude * Math.sin(t * b);
         ctx.lineTo(x, y);
@@ -462,64 +454,101 @@ const PulseFlow = () => {
       const a = frequency / 100;
       const b = a * selectedFreq.shapeOffset;
 
-      // Define shape based on shapeType
-      const drawShape = (amplitude, isSecondary = false) => {
-        ctx.beginPath();
-        for (let t = 0; t < Math.PI * 2; t += 0.01) {
-          let x, y;
-          switch (selectedFreq.shapeType) {
-            case 'ripples':
-              x = canvas.width / 2 + Math.cos(t) * amplitude;
-              y = canvas.height / 2 + Math.sin(t) * amplitude;
-              break;
-            case 'spiral':
-              x = canvas.width / 2 + (Math.cos(t) * t / (2 * Math.PI)) * amplitude;
-              y = canvas.height / 2 + (Math.sin(t) * t / (2 * Math.PI)) * amplitude;
-              break;
-            case 'waves':
-              x = canvas.width / 2 + Math.cos(t * 2) * amplitude * Math.cos(t);
-              y = canvas.height / 2 + Math.sin(t * 2) * amplitude * Math.sin(t + time * pulseRate);
-              break;
-            case 'lattice':
-              x = canvas.width / 2 + Math.cos(t * a) * amplitude * Math.sin(t * b);
-              y = canvas.height / 2 + Math.sin(t * a) * amplitude * Math.cos(t * b + time * pulseRate);
-              break;
-            case 'flower':
-              x = canvas.width / 2 + Math.cos(t * 5) * amplitude * Math.cos(t);
-              y = canvas.height / 2 + Math.sin(t * 5) * amplitude * Math.sin(t + time * pulseRate);
-              break;
-            case 'ring':
-              x = canvas.width / 2 + Math.cos(t * 2) * amplitude * Math.cos(t * 1.5);
-              y = canvas.height / 2 + Math.sin(t * 2) * amplitude * Math.sin(t * 1.5 + time * pulseRate);
-              break;
-            case 'web':
-              x = canvas.width / 2 + Math.cos(t * 3) * amplitude * Math.sin(t);
-              y = canvas.height / 2 + Math.sin(t * 3) * amplitude * Math.cos(t + time * pulseRate);
-              break;
-            case 'mandala':
-              x = canvas.width / 2 + Math.cos(t * 7) * amplitude * Math.cos(t * 0.5);
-              y = canvas.height / 2 + Math.sin(t * 7) * amplitude * Math.sin(t * 0.5 + time * pulseRate);
-              break;
-            case 'orbit':
-              x = canvas.width / 2 + Math.cos(t * 8) * amplitude * Math.cos(t * 0.8);
-              y = canvas.height / 2 + Math.sin(t * 8) * amplitude * Math.sin(t * 0.8 + time * pulseRate);
-              break;
-          }
-          if (isSecondary) {
+      // Primary cymatic pattern
+      ctx.beginPath();
+      for (let t = 0; t < Math.PI * 2; t += 0.01) {
+        const amplitude = (canvas.width * 0.15) * (1 + Math.sin(time * pulseRate) * amplitudeScale);
+        let x, y;
+        switch (selectedFreq.shapeType) {
+          case 'waves':
+            x = canvas.width / 2 + Math.cos(t) * amplitude;
+            y = canvas.height / 2 + Math.sin(t) * amplitude;
+            break;
+          case 'spiral':
+            x = canvas.width / 2 + (Math.cos(t) * t / (2 * Math.PI)) * amplitude;
+            y = canvas.height / 2 + (Math.sin(t) * t / (2 * Math.PI)) * amplitude;
+            break;
+          case 'shields':
+            x = canvas.width / 2 + Math.cos(t * 2) * amplitude * Math.cos(t);
+            y = canvas.height / 2 + Math.sin(t * 2) * amplitude * Math.sin(t + time * pulseRate);
+            break;
+          case 'mosaic':
+            x = canvas.width / 2 + Math.cos(t * a) * amplitude * Math.sin(t * b);
+            y = canvas.height / 2 + Math.sin(t * a) * amplitude * Math.cos(t * b + time * pulseRate);
+            break;
+          case 'lotus':
+            x = canvas.width / 2 + Math.cos(t * 5) * amplitude * Math.cos(t);
+            y = canvas.height / 2 + Math.sin(t * 5) * amplitude * Math.sin(t + time * pulseRate);
+            break;
+          case 'knots':
+            x = canvas.width / 2 + Math.cos(t * 2) * amplitude * Math.cos(t * 1.5);
+            y = canvas.height / 2 + Math.sin(t * 2) * amplitude * Math.sin(t * 1.5 + time * pulseRate);
+            break;
+          case 'lattice':
+            x = canvas.width / 2 + Math.cos(t * 3) * amplitude * Math.sin(t);
+            y = canvas.height / 2 + Math.sin(t * 3) * amplitude * Math.cos(t + time * pulseRate);
+            break;
+          case 'compass':
+            x = canvas.width / 2 + Math.cos(t * 7) * amplitude * Math.cos(t * 0.5);
+            y = canvas.height / 2 + Math.sin(t * 7) * amplitude * Math.sin(t * 0.5 + time * pulseRate);
+            break;
+          case 'halo':
+            x = canvas.width / 2 + Math.cos(t * 8) * amplitude * Math.cos(t * 0.8);
+            y = canvas.height / 2 + Math.sin(t * 8) * amplitude * Math.sin(t * 0.8 + time * pulseRate);
+            break;
+        }
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.fill();
+
+      // Secondary pattern for depth
+      ctx.beginPath();
+      ctx.strokeStyle = `${selectedFreq.color}66`;
+      for (let t = 0; t < Math.PI * 2; t += 0.01) {
+        const amplitude = (canvas.width * 0.1) * (1 + Math.cos(time * pulseRate) * amplitudeScale);
+        let x, y;
+        switch (selectedFreq.shapeType) {
+          case 'waves':
+            x = canvas.width / 2 + Math.sin(t) * amplitude * Math.cos(t);
+            y = canvas.height / 2 + Math.cos(t) * amplitude * Math.sin(t + time * pulseRate);
+            break;
+          case 'spiral':
+            x = canvas.width / 2 + (Math.sin(t) * t / (2 * Math.PI)) * amplitude;
+            y = canvas.height / 2 + (Math.cos(t) * t / (2 * Math.PI)) * amplitude;
+            break;
+          case 'shields':
+            x = canvas.width / 2 + Math.sin(t * 2) * amplitude * Math.sin(t);
+            y = canvas.height / 2 + Math.cos(t * 2) * amplitude * Math.cos(t + time * pulseRate);
+            break;
+          case 'mosaic':
             x = canvas.width / 2 + Math.sin(t * a) * amplitude * Math.cos(t * b);
             y = canvas.height / 2 + Math.cos(t * a) * amplitude * Math.sin(t * b + time * pulseRate);
-          }
-          ctx.lineTo(x, y);
+            break;
+          case 'lotus':
+            x = canvas.width / 2 + Math.sin(t * 5) * amplitude * Math.sin(t);
+            y = canvas.height / 2 + Math.cos(t * 5) * amplitude * Math.cos(t + time * pulseRate);
+            break;
+          case 'knots':
+            x = canvas.width / 2 + Math.sin(t * 2) * amplitude * Math.sin(t * 1.5);
+            y = canvas.height / 2 + Math.cos(t * 2) * amplitude * Math.cos(t * 1.5 + time * pulseRate);
+            break;
+          case 'lattice':
+            x = canvas.width / 2 + Math.sin(t * 3) * amplitude * Math.cos(t);
+            y = canvas.height / 2 + Math.cos(t * 3) * amplitude * Math.sin(t + time * pulseRate);
+            break;
+          case 'compass':
+            x = canvas.width / 2 + Math.sin(t * 7) * amplitude * Math.sin(t * 0.5);
+            y = canvas.height / 2 + Math.cos(t * 7) * amplitude * Math.cos(t * 0.5 + time * pulseRate);
+            break;
+          case 'halo':
+            x = canvas.width / 2 + Math.sin(t * 8) * amplitude * Math.sin(t * 0.8);
+            y = canvas.height / 2 + Math.cos(t * 8) * amplitude * Math.cos(t * 0.8 + time * pulseRate);
+            break;
         }
-        if (!isSecondary) ctx.fill();
-        ctx.stroke();
-      };
-
-      // Primary pattern
-      drawShape((canvas.width * 0.3) * (1 + Math.sin(time * pulseRate) * amplitudeScale));
-      // Secondary pattern for depth
-      ctx.strokeStyle = `${selectedFreq.color}66`;
-      drawShape((canvas.width * 0.2) * (1 + Math.cos(time * pulseRate) * amplitudeScale), true);
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
 
       time += 0.05;
       animationFrameIdRef.current = requestAnimationFrame(drawCymatic);
@@ -588,10 +617,9 @@ const PulseFlow = () => {
               onClick={toggleAudio}
               className={`pulseflow-link px-4 py-2 rounded ${isPlaying ? 'bg-red-500' : 'bg-[#000000]'}`}
               style={{ textDecoration: 'none', color: 'black', minHeight: '44px', minWidth: '80px', borderRadius: '4px' }}
-              aria-label={isPlaying ? 'Stop audio' : 'Play audio'}
-              disabled={!frequency}
+              aria-label="Stop audio"
             >
-              {isPlaying ? 'Stop' : 'Play'}
+              Stop
             </button>
             <input
               type="range"
@@ -638,7 +666,14 @@ const PulseFlow = () => {
             <button
               key={freq.hz}
               onClick={() => {
+                if (oscillatorRef.current && isPlaying) oscillatorRef.current.stop();
                 setFrequency(freq.hz);
+                oscillatorRef.current = audioContextRef.current.createOscillator();
+                oscillatorRef.current.type = 'sine';
+                oscillatorRef.current.frequency.setValueAtTime(freq.hz, audioContextRef.current.currentTime);
+                oscillatorRef.current.connect(gainNodeRef.current);
+                oscillatorRef.current.start();
+                setIsPlaying(true);
                 if ('vibrate' in navigator) navigator.vibrate(50);
               }}
               className="pulseflow-link p-2 rounded"
