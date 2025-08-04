@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { FaOm, FaLeaf, FaTimes } from 'react-icons/fa';
+import { FaOm, FaLeaf, FaTimes, FaWave } from 'react-icons/fa'; // Added FaWave for potential use
 import '../styles/Header.css';
 
 const Header = () => {
@@ -17,6 +17,7 @@ const Header = () => {
     { path: '/solfeggio-studio', name: 'Solfeggio' },
     { path: '/frequencies', name: 'Frequencies' },
     { path: '/chakra-chants', name: 'Chakras' },
+    { path: '/multiwave', name: 'MultiWave' }, // Added new page
   ];
 
   const getHeaderClass = () => {
@@ -29,6 +30,8 @@ const Header = () => {
         return 'App-header-frequencies';
       case '/chakra-chants':
         return 'App-header-chakras';
+      case '/multiwave':
+        return 'App-header-multiwave'; // New class for MultiWave page
       default:
         return '';
     }
@@ -78,7 +81,7 @@ const Header = () => {
     const handleOutsideClick = (e) => {
       if (
         isMobileMenuOpen &&
-        menuRef.current && // Added null check
+        menuRef.current &&
         toggleButtonRef.current &&
         !menuRef.current.contains(e.target) &&
         !toggleButtonRef.current.contains(e.target)

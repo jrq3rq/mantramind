@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Home.css';
@@ -8,7 +7,7 @@ const Home = () => {
     <div className="home-container">
       <h1 className="home-title">Welcome to MantraMind</h1>
       <p className="home-description">
-        MantraMind presents PulseFlow Journey, a meditation system using rhythmic sound and mindfulness to unlock relaxation, clarity, and universal connection. Enhance your practice with personalized mantras, Solfeggio frequencies, and chakra chants.
+        MantraMind presents PulseFlow Journey, a meditation system using rhythmic sound and mindfulness to unlock relaxation, clarity, and universal connection. Enhance your practice with personalized mantras, Solfeggio frequencies, chakra chants, and electromagnetic healing technologies.
       </p>
 
       <section className="home-section">
@@ -52,6 +51,21 @@ const Home = () => {
         </p>
         <p className="home-section-text">
           <Link to="/frequencies" className="home-section-link">Create Your Mantra</Link>
+        </p>
+      </section>
+
+      <section className="home-section">
+        <h2 className="home-section-title">MultiWave Oscillator: Electromagnetic Healing</h2>
+        <p className="home-section-text">
+          The MultiWave Oscillator (MWO), developed by Georges Lakhovsky, uses electromagnetic frequencies to enhance cellular health and promote detoxification. This experimental device aims to harmonize the body’s energy field, offering potential relief for ailments like pain, fatigue, and electrostress.
+        </p>
+        <ul className="home-section-list">
+          <li>Enhances cellular energy and immunity.</li>
+          <li>May relieve pain and chronic conditions.</li>
+          <li>Supports detoxification and anti-aging.</li>
+        </ul>
+        <p className="home-section-text">
+          <Link to="/multiwave" className="home-section-link">Explore MultiWave Healing</Link>
         </p>
       </section>
     </div>

@@ -10,7 +10,8 @@ import SolfeggioStudio from "./pages/SolfeggioStudio";
 import Footer from "./components/Footer";
 import ChakraChants from "./pages/ChakraChants";
 import PulseFlow from "./pages/PulseFlow";
-import { useEffect } from 'react'; // Added useEffect import
+import MultiWave from "./pages/MultiWave"; // Import new component
+import { useEffect } from 'react';
 
 function App() {
   const location = useLocation();
@@ -19,7 +20,7 @@ function App() {
   // Scroll to top on route change
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]); // Trigger on pathname change
+  }, [location.pathname]);
 
   const variants = {
     initial: (direction) => ({
@@ -73,6 +74,7 @@ function App() {
             <Route path="/solfeggio-studio" element={<SolfeggioStudio />} />
             <Route path="/frequencies" element={<Frequencies />} />
             <Route path="/chakra-chants" element={<ChakraChants />} />
+            <Route path="/multiwave" element={<MultiWave />} /> {/* Added new route */}
           </Routes>
         </motion.div>
       </AnimatePresence>
