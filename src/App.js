@@ -10,8 +10,11 @@ import SolfeggioStudio from "./pages/SolfeggioStudio";
 import Footer from "./components/Footer";
 import ChakraChants from "./pages/ChakraChants";
 import PulseFlow from "./pages/PulseFlow";
-import MultiWave from "./pages/MultiWave"; // Import new component
+import MultiWave from "./pages/MultiWave";
 import { useEffect } from 'react';
+import MerkabaVisualization from "./pages/Merkaba";
+import MerkabaRotator from "./pages/Merkaba";
+import MerkabaSpinner from "./pages/Merkaba";
 
 function App() {
   const location = useLocation();
@@ -74,7 +77,8 @@ function App() {
             <Route path="/solfeggio-studio" element={<SolfeggioStudio />} />
             <Route path="/frequencies" element={<Frequencies />} />
             <Route path="/chakra-chants" element={<ChakraChants />} />
-            <Route path="/multiwave" element={<MultiWave />} /> {/* Added new route */}
+            <Route path="/merkaba" element={<MerkabaSpinner />} />
+            <Route path="/multiwave" element={<MultiWave />} />
           </Routes>
         </motion.div>
       </AnimatePresence>

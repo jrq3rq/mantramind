@@ -17,7 +17,8 @@ const Header = () => {
     { path: '/solfeggio-studio', name: 'Solfeggio' },
     { path: '/frequencies', name: 'Frequencies' },
     { path: '/chakra-chants', name: 'Chakras' },
-    { path: '/multiwave', name: 'MultiWave' }, // Added new page
+    { path: '/merkaba', name: 'Merkaba' },
+    { path: '/multiwave', name: 'MultiWave' },
   ];
 
   const getHeaderClass = () => {
@@ -30,8 +31,10 @@ const Header = () => {
         return 'App-header-frequencies';
       case '/chakra-chants':
         return 'App-header-chakras';
+      case '/merkaba':
+        return 'App-header-merkaba';
       case '/multiwave':
-        return 'App-header-multiwave'; // New class for MultiWave page
+        return 'App-header-multiwave';
       default:
         return '';
     }
